@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- `void` is a Java keyword and AAPT rejects it as a resource name, so the
+         film's background colour is `void_bg` here. -->
+    <color name="void_bg">#FF03050A</color>
+    <color name="deep">#FF070C14</color>
+    <color name="panel">#FF0B1119</color>
+    <color name="line">#FF1B2C3C</color>
+    <color name="line_hi">#FF2C4A60</color>
+    <color name="cyan">#FF56D6E8</color>
+    <color name="cyan_dim">#FF2B7F8E</color>
+    <color name="white">#FFDCEAF2</color>
+    <color name="dim">#FF6B8598</color>
+    <color name="warn">#FFF6B03E</color>
+    <color name="red">#FFE83E36</color>
+    <color name="ic_launcher_background">#FF03050A</color>
+
+    <!-- The QR field. Light modules on a dark field would sit better in this
+         palette and fail on a good share of phone cameras, so the code is dark
+         on light; these are the film's near-white and near-black rather than
+         pure #FFF and #000 so it still reads as part of the app. -->
+    <color name="qr_light">#FFE8F2F7</color>
+    <color name="qr_dark">#FF04070C</color>
+</resources>

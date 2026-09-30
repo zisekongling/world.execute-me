@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">world.execute(me);</string>
+    <string name="app_tagline">Mili — 实时网页动画 MV</string>
+
+    <string name="launcher_intro">这部片子本身是一个网页。为了在手机上看它，这里提供两种播放方式：用系统自带的 WebView（最快，不需要联网），或者把影片交给你自己选的浏览器来渲染。</string>
+
+    <string name="section_engine">播放内核</string>
+    <string name="engine_webview">系统 WebView</string>
+    <string name="engine_webview_hint">推荐。使用手机自带的浏览器内核，影片随 app 一起打包，完全离线。</string>
+    <string name="engine_browser">其他浏览器</string>
+    <string name="engine_browser_hint">app 在本地建一个小服务器，然后跳转到你选定的浏览器打开。画面由那个浏览器渲染。</string>
+
+    <string name="browser_none">尚未选择</string>
+    <string name="browser_current_note">%1$s · 当前选择</string>
+    <string name="browser_pick">选择</string>
+    <string name="browser_dialog_title">用哪个浏览器播放</string>
+    <string name="browser_empty">设备上没有找到可以打开网页的浏览器。</string>
+
+    <string name="section_quality">渲染质量</string>
+    <string name="quality_auto">自动</string>
+    <string name="quality_auto_hint">按屏幕实际密度渲染，引擎自己封顶。</string>
+    <string name="quality_low">省电</string>
+    <string name="quality_low_hint">降低渲染分辨率并减少动效。老机器或发热明显时选它。</string>
+    <string name="quality_high">高画质</string>
+    <string name="quality_high_hint">强制按 2 倍密度渲染。仅适合性能充裕的设备。</string>
+
+    <string name="section_options">播放选项</string>
+    <string name="opt_landscape">强制横屏</string>
+    <string name="opt_landscape_hint">影片是宽银幕构图。用浏览器播放时会尝试全屏并锁定横屏，但浏览器有权拒绝。</string>
+    <string name="opt_keep_on">播放时屏幕常亮</string>
+
+    <string name="action_start">开始播放</string>
+
+    <string name="player_reload">重新加载</string>
+    <string name="player_quality">渲染质量</string>
+    <string name="player_hide_ui">显示／隐藏界面</string>
+    <string name="player_log">开发者日志</string>
+    <string name="player_open_in_browser">改用浏览器播放</string>
+    <string name="player_exit">退出</string>
+    <string name="player_error">影片没能加载：%1$s</string>
+    <string name="player_retry">重试</string>
+
+    <string name="serve_title">正在通过内建服务器播放</string>
+    <string name="serve_body">影片由 app 内部的本地服务器提供，实际渲染交给浏览器。这个页面可以留着，也可以切回来看状态。</string>
+    <string name="serve_open">在浏览器中打开</string>
+    <string name="serve_copy">复制地址</string>
+    <string name="serve_copied">地址已复制</string>
+    <string name="serve_stop">停止服务器并返回</string>
+    <string name="serve_browser_line">已选定：%1$s（%2$s）</string>
+    <string name="browser_gone">原选定的浏览器（%1$s）已不在设备上，请重新选择。</string>
+    <string name="serve_stop_confirm_title">停止本地服务器？</string>
+    <string name="serve_stop_confirm_body">浏览器里已经打开的影片会停止播放，因为页面就来自这个服务器。</string>
+
+    <string name="share_section">分享到局域网</string>
+    <string name="share_switch">让同一网络的其他设备也能播放</string>
+    <string name="share_hint">打开后，同一个 Wi-Fi 下的手机、平板或电视用相机扫右边的二维码就能看。地址里带一个本次随机生成的口令，关掉开关即刻失效。</string>
+    <string name="share_hint_on">分享已开启。这个口令是刚刚随机生成的；关掉开关，扫出去的地址立刻失效。</string>
+    <string name="share_panel_title">扫码播放</string>
+    <string name="share_scan_note">用相机或扫码应用扫这个码，打开后点画面开始播放</string>
+    <string name="share_copy">复制分享地址</string>
+    <string name="share_copied">分享地址已复制</string>
+    <string name="share_no_lan">没有找到局域网地址。先连上 Wi-Fi，或者开热点，再打开这个开关。</string>
+    <string name="share_on">已开启分享，口令已换成新的一串</string>
+    <string name="share_off">已关闭分享，原来的地址已失效</string>
+    <string name="share_qr_failed">二维码没能生成，可以点下面复制地址。</string>
+    <string name="share_failed">分享没能开启：%1$s</string>
+
+    <string name="notif_channel">本地服务器</string>
+    <string name="notif_channel_desc">在用浏览器播放时保持本地服务器运行</string>
+    <string name="notif_starting">正在准备本地服务器…</string>
+    <string name="notif_ready">已在本机提供影片：%1$s</string>
+    <string name="notif_ready_lan">已在局域网分享影片：%1$s</string>
+    <string name="notif_failed">本地服务器启动失败：%1$s</string>
+    <string name="notif_stop">停止</string>
+
+    <string name="exit_title">退出播放？</string>
+    <string name="exit_message">影片会停在当前画面。</string>
+    <string name="exit_yes">退出</string>
+    <string name="exit_no">继续看</string>
+
+    <string name="log_title">最近 %1$d 行日志</string>
+    <string name="log_copy">复制</string>
+    <string name="log_clear">清空</string>
+    <string name="log_copied">日志已复制</string>
+    <string name="close">关闭</string>
+</resources>

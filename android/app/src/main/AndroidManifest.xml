@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- The film ships inside the APK, so nothing here needs the network. The
+         INTERNET permission is only for the loopback server. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Browser mode keeps the local server alive while another app is on
+         screen, which makes this a foreground service with a notification. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- The screen-lock so a three-and-a-half-minute film is not interrupted by
+         the display sleeping mid-scene. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- A phone is the target but not the only possible device: the film is a
+         canvas and a WebView, which works on anything with a browser engine. -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <!-- Package visibility (API 30+). Declaring the http/https VIEW intent is
+         what makes the installed browsers discoverable to Browsers.list();
+         without it queryIntentActivities returns an empty list even though the
+         browsers are plainly there. This is the narrow replacement for
+         QUERY_ALL_PACKAGES. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".ViewerApp"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Viewer">
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- The film itself. Everything but the film is hidden in immersive
+             mode, so `configChanges` is what keeps a rotation or a cutout
+             change from destroying the WebView and restarting the audio. -->
+        <activity
+            android:name=".PlayerActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode|density"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="sensorLandscape"
+            android:theme="@style/Theme.Viewer.Player" />
+
+        <activity
+            android:name=".ServeActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|uiMode"
+            android:exported="false"
+            android:label="@string/serve_title"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Viewer" />
+
+        <!-- dataSync: the service is not doing background compute, it is holding
+             a server socket open while another app reads from it. -->
+        <service
+            android:name=".AssetServerService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+    </application>
+</manifest>

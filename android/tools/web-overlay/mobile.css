@@ -1,0 +1,288 @@
+/* ============================================================================
+   android/tools/web-overlay/mobile.css
+
+   The phone layer. Nothing in this file is reachable until mobile.js adds
+   `da-mobile` to <html>, and mobile.js only does that on a device that reports
+   touch. If the script never runs — an ancient WebView, a JavaScript error, a
+   file:// quirk — the desktop interface styles the page exactly as it always
+   has, and the film is no worse off for having been opened on a phone.
+
+   Three things are being fixed here:
+
+     1. the picture should have the whole screen. The transport is moved out of
+        the flex column and floats over the bottom edge, so a 20:9 phone is not
+        left with a 16:9 stage squeezed into the space above a control bar;
+     2. fingers are not a mouse. Every control grows to a real touch target,
+        the seek bar becomes draggable, hover styles are dropped, and the
+        keyboard hints are replaced by touch instructions (mobile.js);
+     3. a phone in landscape has a notch, rounded corners and a home bar in the
+        way. Everything that sits at an edge respects the safe-area insets.
+   ========================================================================== */
+
+html.da-mobile {
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+html.da-mobile body {
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- the picture owns the screen; the chrome floats over it -------------- */
+html.da-mobile #shell { display: block; }
+html.da-mobile #stage { position: absolute; inset: 0; }
+
+html.da-mobile #ctrl {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  padding: 6px calc(10px + env(safe-area-inset-right, 0px))
+           calc(8px + env(safe-area-inset-bottom, 0px))
+           calc(10px + env(safe-area-inset-left, 0px));
+  background: linear-gradient(180deg,
+              rgba(3, 5, 10, 0) 0%,
+              rgba(3, 5, 10, 0.55) 30%,
+              rgba(3, 5, 10, 0.86) 100%);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+html.da-mobile #ctrl::before { left: calc(10px + env(safe-area-inset-left, 0px));
+                              right: calc(10px + env(safe-area-inset-right, 0px)); }
+
+html.da-mobile #hud-top {
+  padding: calc(4px + env(safe-area-inset-top, 0px))
+           calc(12px + env(safe-area-inset-right, 0px)) 6px
+           calc(12px + env(safe-area-inset-left, 0px));
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+html.da-mobile #hud-top .sub { display: none; }
+html.da-mobile #hud-top .da-topbar { pointer-events: auto; }
+
+/* The lyric sits just above the transport, and the transport is one row shorter
+   than the desktop one (the secondary controls live in the top strip), so this
+   number is the desktop 118px minus the difference.
+
+   `opacity: 1` is doing real work here, not restating a default. The film's own
+   `body.hide-ui #panel { opacity: 0 }` (src/style.css:49) takes the subtitle down
+   with the chrome, which is wrong for the same reason it would be wrong to hide
+   the picture: the words are what is being watched. This rule has the same
+   specificity as that one and is loaded later, so it wins. */
+html.da-mobile #panel {
+  bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+  padding: 0 calc(16px + env(safe-area-inset-right, 0px))
+           0 calc(16px + env(safe-area-inset-left, 0px));
+  transition: opacity 0.28s ease;
+  opacity: 1;
+}
+html.da-mobile #lyric-line { font-size: clamp(17px, 3.4vw, 33px); }
+
+/* ---- fingers ------------------------------------------------------------- */
+html.da-mobile .btn {
+  height: 44px;
+  min-width: 48px;
+  padding: 0 12px;
+  font-size: 12px;
+  border-color: var(--line);
+}
+html.da-mobile .btn:hover { border-color: var(--line); color: var(--white); background: var(--panel); }
+html.da-mobile .btn:active { border-color: var(--cyan-dim); color: var(--cyan); background: #131f2b; }
+html.da-mobile .btn.icon svg { width: 20px; height: 20px; }
+
+html.da-mobile #ctrl .row { gap: 12px; flex-wrap: nowrap; }
+html.da-mobile #ctrl .grp { gap: 10px; }
+html.da-mobile .time { font-size: 13px; }
+
+html.da-mobile #wave {
+  height: 40px;
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+html.da-mobile #wave:hover { height: 40px; }
+html.da-mobile #wave.dragging { height: 48px; opacity: 1; }
+html.da-mobile #marks i { height: 6px; }
+html.da-mobile #marks i.big { height: 10px; }
+html.da-mobile #wave-head { box-shadow: 0 0 8px rgba(86, 214, 232, 0.85); }
+
+html.da-mobile input.range { height: 40px; }
+html.da-mobile input.range::-webkit-slider-thumb {
+  width: 16px; height: 26px; margin-top: -12px;
+}
+html.da-mobile #vol-val, html.da-mobile #off-val { font-size: 12px; min-width: 46px; }
+
+/* ---- toasts ---------------------------------------------------------------
+   The film parks its toasts 176 px above the bottom of the stage. On a 900 px
+   desktop window that is just above the transport; a phone held sideways is
+   only ~390 px tall, so the same number lands on the artwork — and they are
+   centred, which is where the subtitle is.
+
+   `mobile.js` therefore re-parents `#toast-host` into the top strip, and this
+   makes it read as part of that strip rather than as a floating chip: the free
+   space at the strip's left end (where the brand would be) is just the width a
+   status line needs, and it puts the message beside the control it is reporting
+   on. Both this file's `toast()` and the film's own append to this one host, so
+   the sync nudge, the subtitle mode and the film's audio errors all move. */
+html.da-mobile #toast-host {
+  position: static;
+  transform: none;
+  flex-direction: row;
+  order: -1;                /* ahead of the −5s button, i.e. the strip's left end */
+  margin-right: 2px;
+  pointer-events: none;
+}
+html.da-mobile #toast-host .toast {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  max-width: 38vw;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  animation: da-toast-in 0.18s ease-out;
+}
+@keyframes da-toast-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- the injected top strip --------------------------------------------- */
+html.da-mobile #hud-top .da-topbar {
+  order: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+html.da-mobile #hud-top .right { order: 3; }
+html.da-mobile .da-topbar .btn.da-btn {
+  height: 38px;
+  min-width: 44px;
+  padding: 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  background: rgba(7, 12, 20, 0.82);
+}
+html.da-mobile .da-topbar .da-off {
+  font-size: 11px;
+  color: var(--dim);
+  min-width: 54px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+html.da-mobile .da-topbar .da-off.nonzero { color: var(--warn); }
+html.da-mobile .da-topbar .da-off.hot { color: var(--red); }
+
+/* ---- subtitle states -----------------------------------------------------
+   The lyric line itself needs no rules of its own: the overlay rewrites the
+   text inside the film's own `#lyric-line`, so it keeps the film's typography
+   and its `instrumental` styling for free. Only the two states that change
+   what is on screen need saying. */
+/* The line is faded, not removed: the engine goes on writing into it, and the
+   panel keeps its height, so nothing in the picture reflows when it goes.
+
+   This is the ONLY rule that may hide the panel, and it needs the extra class on
+   `html` to outrank the two `opacity: 1` rules above and below it — the buttons
+   on `html` and the `body` element they hang off otherwise tie on specificity
+   and leave the outcome to source order. */
+html.da-mobile.da-lyr-off #panel { opacity: 0; }
+html.da-mobile .da-topbar #da-lyr-btn[data-lyr="zh"] { color: var(--cyan); }
+html.da-mobile .da-topbar #da-lyr-btn[data-lyr="off"] { color: var(--dim); opacity: 0.7; }
+
+/* ---- auto-hidden chrome --------------------------------------------------
+   `#panel` is deliberately NOT in this list: it holds the lyric line, which is
+   content. `#hud-top` and `#ctrl` can go away; the words stay. */
+html.da-mobile body.da-ui-hidden #hud-top,
+html.da-mobile body.da-ui-hidden #ctrl {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+html.da-mobile body.da-ui-hidden #hud-top { transform: translateY(-8px); }
+
+/* ---- narrow landscape phones --------------------------------------------
+   A 16:9 phone held sideways is about 640-900 CSS px wide and under 420 px
+   tall. There is no room for the brand, so it goes first — and the top-left
+   corner it leaves behind is exactly where the native menu button sits, which
+   is why the cut is at 1000 px rather than at the phone widths alone. */
+@media (max-width: 1000px) {
+  html.da-mobile #hud-top .brand { display: none; }
+  html.da-mobile #hud-top { justify-content: flex-end; }
+  /* `#clock` is bound by the engine (`60_app.js:37`) but never written by any
+     file in the film, so it reads 0:00.000 forever. On a desktop HUD that is a
+     quiet piece of set dressing; in the one free corner of a phone it reads as
+     a broken readout, and the bottom bar already prints the same time two
+     sizes larger. So it goes at the same width the brand does — and the `sep`
+     between it and `#state` has to go with it, or the state badge is left
+     trailing a slash that separates it from nothing. */
+  html.da-mobile #hud-top #clock,
+  html.da-mobile #hud-top .right .sep { display: none; }
+}
+@media (max-width: 700px) {
+  html.da-mobile #ctrl .grp.grow { display: none; }   /* hardware volume keys still work */
+}
+@media (max-height: 420px) {
+  html.da-mobile #lyric-line { font-size: clamp(16px, 3.2vw, 26px); }
+  html.da-mobile #panel { bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* A phone held the wrong way round. The app locks its own window, but a
+   browser we only *handed a URL to* cannot be locked from here, so the film
+   has to ask. Hidden entirely when the native host is present. */
+.da-rotate { display: none; }
+@media (orientation: portrait) {
+  html.da-touch .da-rotate {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 28px;
+    text-align: center;
+    background: rgba(3, 5, 10, 0.96);
+  }
+}
+html.da-native .da-rotate { display: none !important; }
+.da-rotate .da-rot-ico {
+  width: 54px; height: 54px;
+  border: 1px solid var(--cyan-dim);
+  border-radius: 8px;
+  position: relative;
+  animation: da-rot 1.8s ease-in-out infinite;
+}
+.da-rotate .da-rot-ico::after {
+  content: '';
+  position: absolute;
+  right: -4px; top: 50%;
+  width: 8px; height: 8px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--cyan);
+}
+@keyframes da-rot {
+  0%, 45% { transform: rotate(0deg); }
+  55%, 100% { transform: rotate(90deg); }
+}
+.da-rotate .da-rot-txt {
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.da-rotate .da-rot-sub {
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--dim);
+  max-width: 440px;
+}
+.da-rotate .btn { height: 44px; padding: 0 18px; font-size: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .da-rotate .da-rot-ico { animation: none; }
+  html.da-mobile #ctrl, html.da-mobile #hud-top, html.da-mobile #panel { transition: none; }
+}

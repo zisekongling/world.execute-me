@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/void_bg"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="22dp"
+            android:paddingTop="28dp"
+            android:paddingEnd="22dp"
+            android:paddingBottom="8dp">
+
+            <TextView
+                style="@style/ViewerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="@string/app_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/app_tagline"
+                android:textColor="@color/dim"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/line" />
+
+            <TextView
+                style="@style/ViewerHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/launcher_intro" />
+
+            <!-- 播放内核 -->
+            <TextView style="@style/ViewerSectionTitle"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/section_engine" />
+
+            <RadioGroup
+                android:id="@+id/rgEngine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbWebView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="44dp"
+                    android:text="@string/engine_webview"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView style="@style/ViewerHint"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginStart="34dp" android:layout_marginBottom="10dp"
+                    android:text="@string/engine_webview_hint" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbBrowser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="44dp"
+                    android:text="@string/engine_browser"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView style="@style/ViewerHint"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginStart="34dp"
+                    android:text="@string/engine_browser_hint" />
+            </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/rowBrowser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="34dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/panel"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:id="@+id/tvBrowser"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/browser_none"
+                    android:textColor="@color/cyan"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPickBrowser"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/browser_pick"
+                    android:textColor="@color/cyan" />
+            </LinearLayout>
+
+            <!-- 画质 -->
+            <TextView style="@style/ViewerSectionTitle"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/section_quality" />
+
+            <RadioGroup
+                android:id="@+id/rgQuality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbAuto"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="42dp"
+                    android:text="@string/quality_auto"
+                    android:textColor="@color/white" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbLow"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="42dp"
+                    android:text="@string/quality_low"
+                    android:textColor="@color/white" />
+
+                <TextView style="@style/ViewerHint"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginStart="34dp" android:layout_marginBottom="6dp"
+                    android:text="@string/quality_low_hint" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rbHigh"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="42dp"
+                    android:text="@string/quality_high"
+                    android:textColor="@color/white" />
+            </RadioGroup>
+
+            <!-- 选项 -->
+            <TextView style="@style/ViewerSectionTitle"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/section_options" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/swLandscape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/opt_landscape"
+                android:textColor="@color/white" />
+
+            <TextView style="@style/ViewerHint"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/opt_landscape_hint" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/swKeepOn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/opt_keep_on"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tvFooter"
+                style="@style/ViewerHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:fontFamily="monospace"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/void_bg"
+        android:paddingStart="22dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="22dp"
+        android:paddingBottom="22dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStart"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:text="@string/action_start"
+            android:textColor="@color/void_bg"
+            android:textSize="16sp"
+            app:backgroundTint="@color/cyan"
+            app:cornerRadius="4dp" />
+    </FrameLayout>
+</LinearLayout>
